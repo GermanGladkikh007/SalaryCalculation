@@ -119,7 +119,7 @@ public class Salary implements Accrual {
             Money salarySegmentAmount = salarySegment.salaryRate().salaryRate();
             long days = salarySegment.payrollDataInterval().getDays();
             long monthDays = salarySegment.payrollDataInterval().start().lengthOfMonth();
-            salary = salary.add(salarySegmentAmount.divide(monthDays).multiply(days));
+            salary = salary.add(salarySegmentAmount.multiply(days).divide(monthDays));
         }
         payrollPeriodSalary = salary;
         return salary;
