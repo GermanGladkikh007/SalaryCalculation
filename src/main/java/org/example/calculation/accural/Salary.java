@@ -21,8 +21,8 @@ import java.util.NavigableMap;
  */
 public class Salary implements Accrual {
 
-    private Employee employee;
-    private PayrollPeriod payrollPeriod;
+    private final Employee employee;
+    private final PayrollPeriod payrollPeriod;
     private Money payrollPeriodSalary = Money.ZERO;
 
     public Salary(Employee employee, PayrollPeriod payrollPeriod) {
@@ -32,6 +32,30 @@ public class Salary implements Accrual {
 
     public Money getPayrollPeriodSalary() {
         return payrollPeriodSalary;
+    }
+
+    @Override
+    public Money calculate() {
+        List<SalarySegment> salarySegments = getSalarySegments();
+        Money salary = Money.ZERO;
+        for(SalarySegment salarySegment : salarySegments ){
+            Money salarySegmentAmount = salarySegment.salaryRate().salaryRate();
+            long days = salarySegment.payrollDataInterval().getDays();
+            long monthDays = salarySegment.payrollDataInterval().start().lengthOfMonth();
+            salary = salary.add(salarySegmentAmount.multiply(days).divide(monthDays));
+        }
+        payrollPeriodSalary = salary;
+        return salary;
+    }
+
+    @Override
+    public String getType() {
+        return "Salary";
+    }
+
+    @Override
+    public String getAmount() {
+        return Long.toString(payrollPeriodSalary.kopecks());
     }
 
     /**
@@ -111,28 +135,6 @@ public class Salary implements Accrual {
         return result;
     }
 
-    @Override
-    public Money calculate() {
-        List<SalarySegment> salarySegments = getSalarySegments();
-        Money salary = Money.ZERO;
-        for(SalarySegment salarySegment : salarySegments ){
-            Money salarySegmentAmount = salarySegment.salaryRate().salaryRate();
-            long days = salarySegment.payrollDataInterval().getDays();
-            long monthDays = salarySegment.payrollDataInterval().start().lengthOfMonth();
-            salary = salary.add(salarySegmentAmount.multiply(days).divide(monthDays));
-        }
-        payrollPeriodSalary = salary;
-        return salary;
-    }
 
-    @Override
-    public String getType() {
-        return "Salary";
-    }
-
-    @Override
-    public String getAmount() {
-        return Long.toString(payrollPeriodSalary.kopecks());
-    }
 
 }

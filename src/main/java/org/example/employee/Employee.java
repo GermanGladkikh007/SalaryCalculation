@@ -7,7 +7,8 @@ public record Employee(
         int employeeId,
         String employeeName,
         String employeeSurname,
-        SalaryHistory salaryHistory) {
+        SalaryHistory salaryHistory,
+        NightShiftRateHistory nightShiftRateHistory) {
 
 
     public String getFullName() {
