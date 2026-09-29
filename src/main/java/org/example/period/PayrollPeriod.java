@@ -1,11 +1,11 @@
 package org.example.period;
 
 import org.example.common.DateInterval;
+import org.example.common.MonthInterval;
 
-/**
- * Хранит информацию о искомом расчетном периоде
- * @param payrollDataInterval интервал дат расчетного периода
+/** Расчетный период
+ * @param payrollMonthInterval
  */
-public record PayrollPeriod(DateInterval payrollDataInterval) {
+public record PayrollPeriod(MonthInterval payrollMonthInterval) {
 
 }

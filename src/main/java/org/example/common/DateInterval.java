@@ -33,6 +33,33 @@ public record DateInterval(LocalDate start, LocalDate end) implements Comparable
                 !end.isBefore(otherDateInterval.start());
     }
 
+    /**
+     * Получение нового интервала из пересечения двух
+     * @param otherDateInterval
+     * @return DateInterval
+     */
+    public DateInterval intersection(DateInterval otherDateInterval) {
+        if(!overlaps(otherDateInterval)) {
+            throw new IllegalArgumentException(
+                    "Интервалы не пересекаются"
+            );
+        }
+
+        LocalDate from = start.isAfter(otherDateInterval.start())
+                ? start
+                : otherDateInterval.start();
+
+        LocalDate to = end.isBefore(otherDateInterval.end())
+                ? end
+                : otherDateInterval.end();
+
+        return new DateInterval(from, to);
+    }
+
+    /**
+     * Количество дней в интервале, включая его концы
+     * @return long
+     */
     public long getDays() {
         return ChronoUnit.DAYS.between(start, end) + 1;
     }

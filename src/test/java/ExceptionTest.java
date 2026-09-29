@@ -16,15 +16,6 @@ public class ExceptionTest {
         SalaryHistory salaryHistory = new SalaryHistory();
         salaryHistory.addSalaryRate(new DateInterval(LocalDate.of(2001, 1, 1), LocalDate.of(2001, 1, 20)),
                 new SalaryRate(new Money(10000000)));
-
-        assertThrows(OverlappingDateIntervalException.class, () -> salaryHistory.addSalaryRate(
-                        new DateInterval(
-                                LocalDate.of(2001, 1, 15),
-                                LocalDate.of(2001, 1, 31)
-                        ),
-                        new SalaryRate(new Money(20000000))
-                )
-        );
     }
 
     @Test

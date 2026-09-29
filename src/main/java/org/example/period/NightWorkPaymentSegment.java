@@ -8,8 +8,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 /**
- * Расчетный сегмент для ночных смен по аналогии
- * с SalarySegment
+ * Расчетный сегмент для ночных смен
  * @param workedNights
  * @param nightRate
  */

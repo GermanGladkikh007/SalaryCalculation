@@ -1,27 +1,21 @@
 import org.example.calculation.accural.NightWorkPayment;
 import org.example.common.DateInterval;
 import org.example.common.Money;
+import org.example.common.MonthInterval;
 import org.example.common.NightRate;
-import org.example.employee.Employee;
-import org.example.employee.NightShiftRateHistory;
-import org.example.employee.SalaryHistory;
-import org.example.period.NightPayrollPeriods;
+import org.example.employee.*;
 import org.example.period.PayrollPeriod;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
+import java.time.YearMonth;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class NightPaymentTest {
 
-    private Employee createEmployee(SalaryHistory salaryHistory, NightShiftRateHistory nightShiftRateHistory) {
-        return new Employee(15, "Киллиан", "Мбаппе", salaryHistory, nightShiftRateHistory);
-    }
+    private EmployeeCreator employeeCreator = new EmployeeCreator();
 
     @Test
     void shouldCalculateForOneNight() {
@@ -32,20 +26,20 @@ public class NightPaymentTest {
                 ),
                 new NightRate(new Money(200000)));
 
-        NightPayrollPeriods nightPayrollPeriods = new NightPayrollPeriods();
-        nightPayrollPeriods.addNightPayrollPeriod(new DateInterval(
-                    LocalDate.of(2001, 1, 15),
-                    LocalDate.of(2001, 1, 15)
+        WorkedNightsHistory workedNightsHistory = new WorkedNightsHistory();
+        workedNightsHistory.addWorkedNight(new DateInterval(
+                        LocalDate.of(2001, 1, 15),
+                        LocalDate.of(2001, 1, 15)
                 )
         );
-
-        PayrollPeriod payrollPeriod = new PayrollPeriod(new DateInterval(LocalDate.of(2001, 1, 1), LocalDate.of(2001, 1, 31)));
-        Employee employee = createEmployee(new SalaryHistory(), nightShiftRateHistory);
-        NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod, nightPayrollPeriods);
+        PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001, 1), YearMonth.of(2001, 1)));
+        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory);
+        NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod);
         Money result = nightWorkPayment.calculate();
 
         assertEquals(200000, result.kopecks());
     }
+
 
     @Test
     void shouldCalculateForSeveralNights() {
@@ -56,43 +50,28 @@ public class NightPaymentTest {
                 ),
                 new NightRate(new Money(200000)));
 
-        NightPayrollPeriods nightPayrollPeriods = new NightPayrollPeriods();
-        nightPayrollPeriods.addNightPayrollPeriod(new DateInterval(
-                LocalDate.of(2001, 1, 15),
-                LocalDate.of(2001, 1, 17)));
-        nightPayrollPeriods.addNightPayrollPeriod(new DateInterval(
-                LocalDate.of(2001, 1, 3),
-                LocalDate.of(2001, 1, 6)));
+        WorkedNightsHistory workedNightsHistory = new WorkedNightsHistory();
+        workedNightsHistory.addWorkedNight(new DateInterval(
+                        LocalDate.of(2001, 1, 15),
+                        LocalDate.of(2001, 1, 17)
+                )
+        );
+        workedNightsHistory.addWorkedNight(new DateInterval(
+                        LocalDate.of(2001, 1, 3),
+                        LocalDate.of(2001, 1, 6)
+                )
 
-        PayrollPeriod payrollPeriod = new PayrollPeriod(new DateInterval(LocalDate.of(2001, 1, 1), LocalDate.of(2001, 1, 31)));
-        Employee employee = createEmployee(new SalaryHistory(), nightShiftRateHistory);
-        NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod, nightPayrollPeriods);
+        );
+
+
+        PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001, 1), YearMonth.of(2001, 1)));
+        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory);
+        NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod);
         Money result = nightWorkPayment.calculate();
 
         assertEquals(1400000, result.kopecks());
     }
 
-    @Test
-    void shouldCalculateForNightAcrossMonths() {
-
-        NightShiftRateHistory nightShiftRateHistory = new NightShiftRateHistory();
-        nightShiftRateHistory.addNightRate(new DateInterval(
-                        LocalDate.of(2001, 1, 1),
-                        LocalDate.of(2001, 2, 28)
-                ),
-                new NightRate(new Money(200000)));
-
-        NightPayrollPeriods nightPayrollPeriods = new NightPayrollPeriods();
-        nightPayrollPeriods.addNightPayrollPeriod(new DateInterval(
-                LocalDate.of(2001, 1, 29),
-                LocalDate.of(2001, 2, 3)));
-        PayrollPeriod payrollPeriod = new PayrollPeriod(new DateInterval(LocalDate.of(2001, 1, 1), LocalDate.of(2001, 2, 28)));
-        Employee employee = createEmployee(new SalaryHistory(), nightShiftRateHistory);
-        NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod, nightPayrollPeriods);
-        Money result = nightWorkPayment.calculate();
-
-        assertEquals(1200000, result.kopecks());
-    }
 
     @Test
     void shouldCalculateForSeveralNightRates() {
@@ -108,24 +87,31 @@ public class NightPaymentTest {
                 ),
                 new NightRate(new Money(100000)));
 
-        NightPayrollPeriods nightPayrollPeriods = new NightPayrollPeriods();
-        nightPayrollPeriods.addNightPayrollPeriod(new DateInterval(
-                LocalDate.of(2001, 1, 29),
-                LocalDate.of(2001, 2, 3)));
-        nightPayrollPeriods.addNightPayrollPeriod(new DateInterval(
-                LocalDate.of(2001, 2, 28),
-                LocalDate.of(2001, 3, 3)));
+        WorkedNightsHistory workedNightsHistory = new WorkedNightsHistory();
+        workedNightsHistory.addWorkedNight(new DateInterval(
+                    LocalDate.of(2001, 1, 29),
+                    LocalDate.of(2001, 2, 3)
+                )
+        );
+        workedNightsHistory.addWorkedNight(new DateInterval(
+                    LocalDate.of(2001, 2, 28),
+                    LocalDate.of(2001, 3, 3)
+                )
 
-        PayrollPeriod payrollPeriod = new PayrollPeriod(new DateInterval(LocalDate.of(2001, 1, 1), LocalDate.of(2001, 3, 30)));
-        Employee employee = createEmployee(new SalaryHistory(), nightShiftRateHistory);
-        NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod, nightPayrollPeriods);
+        );
+
+        PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001, 1), YearMonth.of(2001, 3)));
+        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory);
+        NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod);
+
         Money result = nightWorkPayment.calculate();
 
         assertEquals(1600000, result.kopecks());
     }
 
+
     @Test
-    void shouldCalculateOnlyNightWorkWithinPayrollPeriod(){
+    void shouldCalculateOnlyNightWorkWithinPayrollPeriod() {
         NightShiftRateHistory nightShiftRateHistory = new NightShiftRateHistory();
         nightShiftRateHistory.addNightRate(new DateInterval(
                         LocalDate.of(2001, 1, 1),
@@ -138,19 +124,18 @@ public class NightPaymentTest {
                 ),
                 new NightRate(new Money(100000)));
 
-        NightPayrollPeriods nightPayrollPeriods = new NightPayrollPeriods();
-        nightPayrollPeriods.addNightPayrollPeriod(new DateInterval(
-                LocalDate.of(2001, 2, 28),
-                LocalDate.of(2001, 3, 3)));
-        nightPayrollPeriods.addNightPayrollPeriod(new DateInterval(
-                LocalDate.of(2001, 1, 29),
-                LocalDate.of(2001, 2, 3))
+        WorkedNightsHistory workedNightsHistory = new WorkedNightsHistory();
+        workedNightsHistory.addWorkedNight(new DateInterval(
+                        LocalDate.of(2001, 1, 29),
+                        LocalDate.of(2001, 2, 3)
+                )
         );
 
         // расчетный период, интересующий нас не должен содержать ночных смен
-        PayrollPeriod payrollPeriod = new PayrollPeriod(new DateInterval(LocalDate.of(2001, 1, 1), LocalDate.of(2001, 1, 25)));
-        Employee employee = createEmployee(new SalaryHistory(), nightShiftRateHistory);
-        NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod, nightPayrollPeriods);
+        PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001, 3), YearMonth.of(2001, 3)));
+        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory);
+        NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod);
+
         Money result = nightWorkPayment.calculate();
 
         assertEquals(0, result.kopecks());

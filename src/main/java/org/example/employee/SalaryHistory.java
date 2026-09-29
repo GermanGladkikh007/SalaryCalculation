@@ -6,6 +6,14 @@ import org.example.exception.NonContinuousDateIntervalException;
 import org.example.exception.OverlappingDateIntervalException;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Predicate;
+
+/**
+ * Хранение истории ставок оклада
+ * Отсутсвует геттеры, чтобы не было возможности извне менять список
+ * Для этого есть отдельные методы, позволяющие обращаться к Map извне
+ */
 
 public class SalaryHistory {
 
@@ -18,6 +26,8 @@ public class SalaryHistory {
     /**
      * Добавление интервала дат с новой ставкой оклада
      * Обязательно проверяем здесь пересечение интервалов
+     * и отсутствие разрывов у них, поскольку ставка не может просто исчезнуть
+     * на какой-то срок
      * @param dateInterval
      * @param salaryRate
      */
@@ -43,8 +53,24 @@ public class SalaryHistory {
         salaryHistory.put(dateInterval, salaryRate);
     }
 
-    public NavigableMap<DateInterval, SalaryRate> getSalaryHistory() {
-        return salaryHistory;
+
+    /**
+     * Защищенный проход по Map с условием
+     * @param condition
+     * @param action
+     */
+    public void forEachMatching(
+            Predicate<DateInterval> condition,
+            BiConsumer<DateInterval, SalaryRate> action
+    ) {
+        for(var entry : salaryHistory.entrySet()){
+            DateInterval dateInterval = entry.getKey();
+            SalaryRate salaryRate = entry.getValue();
+
+            if(condition.test(dateInterval)){
+                action.accept(dateInterval, salaryRate);
+            }
+        }
     }
 
 }

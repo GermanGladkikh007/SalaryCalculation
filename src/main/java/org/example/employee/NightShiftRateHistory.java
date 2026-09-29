@@ -7,11 +7,14 @@ import org.example.exception.OverlappingDateIntervalException;
 
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
- * Абсолютный аналог SalaryHistory,
- * Также храним ставку ночных смен
- * на интервалах дат
+ * Хранение истории ставок в ночную смену
+ * Отсутсвует геттеры, чтобы не было возможности извне менять список
+ * Для этого есть отдельные методы, позволяющие обращаться к Map извне
  */
 public class NightShiftRateHistory {
     private final NavigableMap<DateInterval, NightRate> nightRateHistory;
@@ -20,6 +23,15 @@ public class NightShiftRateHistory {
         nightRateHistory = new TreeMap<>();
     }
 
+
+    /**
+     * Добавление нового интервала с новой ставкой в ночную смену
+     * Обязательно проверяем здесь пересечение интервалов
+     * и отсутствие разрывов у них, поскольку ставка не может просто исчезнуть
+     * на какой-то срок
+     * @param dateInterval
+     * @param nightRate
+     */
     public void addNightRate(DateInterval dateInterval, NightRate nightRate) {
         if(nightRateHistory.isEmpty()){
             nightRateHistory.put(dateInterval,nightRate);
@@ -42,5 +54,21 @@ public class NightShiftRateHistory {
         nightRateHistory.put(dateInterval, nightRate);
     }
 
-    public NavigableMap<DateInterval, NightRate> getNightRateHistory() {return nightRateHistory;}
+
+    /**
+     * Защищенный проход по Map с условием
+     * @param condition
+     * @param action
+     */
+
+    public void forEachMatching(Predicate<DateInterval> condition, BiConsumer<DateInterval, NightRate> action) {
+        for(var entry : nightRateHistory.entrySet()) {
+            DateInterval dateInterval = entry.getKey();
+            NightRate nightRate = entry.getValue();
+            if(condition.test(dateInterval)){
+                action.accept(dateInterval, nightRate);
+            }
+        }
+
+    }
 }

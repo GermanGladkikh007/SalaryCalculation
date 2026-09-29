@@ -5,7 +5,8 @@ import org.example.common.DateInterval;
 import org.example.common.Money;
 import org.example.common.NightRate;
 import org.example.employee.Employee;
-import org.example.period.NightPayrollPeriods;
+import org.example.employee.NightShiftRateHistory;
+import org.example.employee.WorkedNightsHistory;
 import org.example.period.NightWorkPaymentSegment;
 import org.example.period.PayrollPeriod;
 
@@ -23,24 +24,23 @@ import java.util.NavigableMap;
  */
 public class NightWorkPayment implements Accrual {
 
-    private Employee employee;
-    private PayrollPeriod payrollPeriod;
-    private NightPayrollPeriods nightPayrollPeriods;
+    private final Employee employee;
+    private final PayrollPeriod payrollPeriod;
     private Money payrollPeriodNightPayment = Money.ZERO;
 
-    public NightWorkPayment (Employee employee, PayrollPeriod payrollPeriod, NightPayrollPeriods nightPayrollPeriods) {
+    public NightWorkPayment (Employee employee, PayrollPeriod payrollPeriod) {
         this.employee = employee;
         this.payrollPeriod = payrollPeriod;
-        this.nightPayrollPeriods = nightPayrollPeriods;
     }
 
     public Money getPayrollPeriodNightPayment () {return payrollPeriodNightPayment;}
 
     @Override
     public Money calculate() {
-        List<NightWorkPaymentSegment> nightWorkPaymentSegments = getNightWorkPaymentSegments();
+        List<NightWorkPaymentSegment> splittedByMonthNightWorkPaymentSegments = splitByMonth(getNightWorkPaymentSegments());
+
         Money nightPayment = Money.ZERO;
-        for(NightWorkPaymentSegment segment : nightWorkPaymentSegments){
+        for(NightWorkPaymentSegment segment : splittedByMonthNightWorkPaymentSegments){
             Money segmentNightRateAmount = segment.nightRate().nightRate();
             long days = segment.workedNights().getDays();
             nightPayment = nightPayment.add(segmentNightRateAmount.multiply(days));
@@ -51,7 +51,7 @@ public class NightWorkPayment implements Accrual {
 
     @Override
     public String getType() {
-        return "Night work payment";
+        return "Доплата за ночные смены";
     }
 
     @Override
@@ -60,52 +60,39 @@ public class NightWorkPayment implements Accrual {
     }
 
     /**
-     * Делим на сегменты ночных выплат, попадающих в расчетный период
-     * Также делим, учитывая переход интервалов через пересечение месяцев
+     * Делим на сегменты ночных выплат, попадающих и в расчетный период и в интервалы выходов на ночные смены
      * @return список сегментов, в котором каждому сегменту соответсвует интервал и ставка в ночную смену на нем
      */
     private List<NightWorkPaymentSegment> getNightWorkPaymentSegments() {
         List<NightWorkPaymentSegment> nightWorkPaymentSegments = new ArrayList<>();
-        NavigableMap<DateInterval, NightRate> nightShiftRateHistoryMap = employee.nightShiftRateHistory().getNightRateHistory();
 
-        for(var entry : nightShiftRateHistoryMap.entrySet()) {
-            DateInterval historyInterval = entry.getKey();
-            NightRate nightRate = entry.getValue();
-            for(DateInterval workedNights : nightPayrollPeriods.getNightPayrollPeriods()){
-                if(historyInterval.overlaps(workedNights) && workedNights.overlaps(payrollPeriod.payrollDataInterval())){
-                    nightWorkPaymentSegments.add(newNightWorkPaymentSegment(payrollPeriod.payrollDataInterval(), historyInterval, workedNights, nightRate));
+        NightShiftRateHistory nightShiftRateHistory = employee.nightShiftRateHistory();
+        WorkedNightsHistory workedNightsHistory = employee.workedNightsHistory();
+        DateInterval payrollDateInterval = payrollPeriod.payrollMonthInterval().toDateInterval();
+
+        nightShiftRateHistory.forEachMatching(
+                nightInterval -> nightInterval.overlaps(payrollDateInterval),
+                (nightInterval, nightRate) -> {
+                    DateInterval actualNightInterval = nightInterval.intersection(payrollDateInterval);
+
+                    workedNightsHistory.forEachMatching(workedNightInterval -> workedNightInterval.overlaps(actualNightInterval),
+                            workedNightInterval -> nightWorkPaymentSegments.add(
+                                    new NightWorkPaymentSegment(
+                                            actualNightInterval.intersection(workedNightInterval), nightRate)
+                            )
+                    );
                 }
-            }
+        );
 
-        }
-        return splitByMonth(nightWorkPaymentSegments);
-    }
-
-    /**
-     * Создание нового сегмента на основе
-     * пересечения интервала отработанных ночных смен с расчетным периодом
-     * и интервалами, в которых действует определенная ставка за ночную смену
-     * @param payrollPeriod
-     * @param historyInterval
-     * @param workedNights
-     * @param nightRate
-     * @return
-     */
-    private NightWorkPaymentSegment newNightWorkPaymentSegment(DateInterval payrollPeriod, DateInterval historyInterval, DateInterval workedNights, NightRate nightRate) {
-        LocalDate payrollStart = payrollPeriod.start().isAfter(workedNights.start()) ? payrollPeriod.start() : workedNights.start();
-        LocalDate payrollEnd = payrollPeriod.end().isBefore(workedNights.end()) ? payrollPeriod.end() : workedNights.end();
-        LocalDate start = historyInterval.start().isAfter(payrollStart) ? historyInterval.start() : payrollStart;
-        LocalDate end = historyInterval.end().isBefore(payrollEnd) ? historyInterval.end() : payrollEnd;
-
-
-        return new NightWorkPaymentSegment(new DateInterval(start,end),nightRate);
+        return nightWorkPaymentSegments;
     }
 
     /**
      * Разделение уже получившихся сегментов по месяцам, чтобы
      * каждый сегмент был частью определенного месяца
      * @param nightWorkPaymentSegments
-     * @return
+     * @return список сегментов, в котором каждому сегменту соответсвует интервал
+     * в границе ровно одного месяца и ставка в ночную смену на этом интервале
      */
     private List<NightWorkPaymentSegment> splitByMonth(List<NightWorkPaymentSegment> nightWorkPaymentSegments) {
         List<NightWorkPaymentSegment> result = new ArrayList<>();
