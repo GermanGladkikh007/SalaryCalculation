@@ -1,5 +1,8 @@
 import org.example.calculation.accural.Salary;
 import org.example.common.*;
+import org.example.common.date_intervals.DateInterval;
+import org.example.common.date_intervals.MonthInterval;
+import org.example.common.rates.SalaryRate;
 import org.example.employee.*;
 import org.example.period.PayrollPeriod;
 import org.junit.jupiter.api.Test;
@@ -23,7 +26,7 @@ public class SalaryTest {
         workedDaysHistory.addWorkedDaysStatus(new DateInterval(LocalDate.of(2001, 1, 1), LocalDate.of(2001, 1, 31)),
                 WorkDayStatus.WORKED);
 
-        Employee employee = employeeCreator.createEmployee(salaryHistory,new NightShiftRateHistory(),workedDaysHistory, new WorkedNightsHistory());
+        Employee employee = employeeCreator.createEmployee(salaryHistory,new NightShiftRateHistory(),workedDaysHistory, new WorkedNightsHistory(), new BonusHistory());
 
         PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001,1), YearMonth.of(2001,1)));
 
@@ -46,7 +49,7 @@ public class SalaryTest {
         workedDaysHistory.addWorkedDaysStatus(new DateInterval(LocalDate.of(2001, 1, 16), LocalDate.of(2001, 1, 31)),
                 WorkDayStatus.VACATION);
 
-        Employee employee = employeeCreator.createEmployee(salaryHistory,new NightShiftRateHistory(),workedDaysHistory, new WorkedNightsHistory());
+        Employee employee = employeeCreator.createEmployee(salaryHistory,new NightShiftRateHistory(),workedDaysHistory, new WorkedNightsHistory(), new BonusHistory());
         PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001,1), YearMonth.of(2001,1)));
 
         Money result = new Salary(employee,payrollPeriod).calculate();
@@ -66,7 +69,7 @@ public class SalaryTest {
         workedDaysHistory.addWorkedDaysStatus(new DateInterval(LocalDate.of(2001, 1, 1), LocalDate.of(2001, 3, 31)),
                 WorkDayStatus.WORKED);
 
-        Employee employee = employeeCreator.createEmployee(salaryHistory,new NightShiftRateHistory(),workedDaysHistory, new WorkedNightsHistory());
+        Employee employee = employeeCreator.createEmployee(salaryHistory,new NightShiftRateHistory(),workedDaysHistory, new WorkedNightsHistory(), new BonusHistory());
         PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001,1), YearMonth.of(2001,3)));
 
         Money result = new Salary(employee,payrollPeriod).calculate();
@@ -85,7 +88,7 @@ public class SalaryTest {
         workedDaysHistory.addWorkedDaysStatus(new DateInterval(LocalDate.of(2001, 1, 1), LocalDate.of(2001, 1, 31)),
                 WorkDayStatus.WORKED);
 
-        Employee employee = employeeCreator.createEmployee(salaryHistory,new NightShiftRateHistory(),workedDaysHistory, new WorkedNightsHistory());
+        Employee employee = employeeCreator.createEmployee(salaryHistory,new NightShiftRateHistory(),workedDaysHistory, new WorkedNightsHistory(), new BonusHistory());
         PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001,1), YearMonth.of(2001,1)));
 
         Money result = new Salary(employee,payrollPeriod).calculate();

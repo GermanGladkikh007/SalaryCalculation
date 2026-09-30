@@ -1,8 +1,8 @@
 import org.example.calculation.accural.NightWorkPayment;
-import org.example.common.DateInterval;
+import org.example.common.date_intervals.DateInterval;
 import org.example.common.Money;
-import org.example.common.MonthInterval;
-import org.example.common.NightRate;
+import org.example.common.date_intervals.MonthInterval;
+import org.example.common.rates.NightRate;
 import org.example.employee.*;
 import org.example.period.PayrollPeriod;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class NightPaymentTest {
                 )
         );
         PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001, 1), YearMonth.of(2001, 1)));
-        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory);
+        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory, new BonusHistory());
         NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod);
         Money result = nightWorkPayment.calculate();
 
@@ -65,7 +65,7 @@ public class NightPaymentTest {
 
 
         PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001, 1), YearMonth.of(2001, 1)));
-        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory);
+        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory, new BonusHistory());
         NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod);
         Money result = nightWorkPayment.calculate();
 
@@ -101,7 +101,7 @@ public class NightPaymentTest {
         );
 
         PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001, 1), YearMonth.of(2001, 3)));
-        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory);
+        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory, new BonusHistory());
         NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod);
 
         Money result = nightWorkPayment.calculate();
@@ -133,7 +133,7 @@ public class NightPaymentTest {
 
         // расчетный период, интересующий нас не должен содержать ночных смен
         PayrollPeriod payrollPeriod = new PayrollPeriod(new MonthInterval(YearMonth.of(2001, 3), YearMonth.of(2001, 3)));
-        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory);
+        Employee employee = employeeCreator.createEmployee(new SalaryHistory(), nightShiftRateHistory, new WorkedDaysHistory(), workedNightsHistory, new BonusHistory());
         NightWorkPayment nightWorkPayment = new NightWorkPayment(employee, payrollPeriod);
 
         Money result = nightWorkPayment.calculate();

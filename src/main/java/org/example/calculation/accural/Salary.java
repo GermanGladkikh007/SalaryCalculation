@@ -1,7 +1,7 @@
 package org.example.calculation.accural;
 
 import org.example.calculation.Accrual;
-import org.example.common.DateInterval;
+import org.example.common.date_intervals.DateInterval;
 import org.example.common.Money;
 import org.example.employee.Employee;
 import org.example.employee.SalaryHistory;

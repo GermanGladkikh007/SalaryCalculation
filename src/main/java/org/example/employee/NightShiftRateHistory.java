@@ -1,14 +1,13 @@
 package org.example.employee;
 
-import org.example.common.DateInterval;
-import org.example.common.NightRate;
+import org.example.common.date_intervals.DateInterval;
+import org.example.common.rates.NightRate;
 import org.example.exception.NonContinuousDateIntervalException;
 import org.example.exception.OverlappingDateIntervalException;
 
 import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**

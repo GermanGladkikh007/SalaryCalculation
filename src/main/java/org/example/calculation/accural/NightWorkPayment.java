@@ -1,9 +1,8 @@
 package org.example.calculation.accural;
 
 import org.example.calculation.Accrual;
-import org.example.common.DateInterval;
+import org.example.common.date_intervals.DateInterval;
 import org.example.common.Money;
-import org.example.common.NightRate;
 import org.example.employee.Employee;
 import org.example.employee.NightShiftRateHistory;
 import org.example.employee.WorkedNightsHistory;
@@ -13,7 +12,6 @@ import org.example.period.PayrollPeriod;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NavigableMap;
 
 
 /**

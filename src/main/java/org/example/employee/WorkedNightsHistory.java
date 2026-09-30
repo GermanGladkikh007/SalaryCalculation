@@ -1,6 +1,6 @@
 package org.example.employee;
 
-import org.example.common.DateInterval;
+import org.example.common.date_intervals.DateInterval;
 import org.example.exception.OverlappingDateIntervalException;
 
 import java.util.ArrayList;

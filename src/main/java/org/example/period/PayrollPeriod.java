@@ -1,7 +1,6 @@
 package org.example.period;
 
-import org.example.common.DateInterval;
-import org.example.common.MonthInterval;
+import org.example.common.date_intervals.MonthInterval;
 
 /** Расчетный период
  * @param payrollMonthInterval

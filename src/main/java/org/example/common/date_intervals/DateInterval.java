@@ -1,4 +1,4 @@
-package org.example.common;
+package org.example.common.date_intervals;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

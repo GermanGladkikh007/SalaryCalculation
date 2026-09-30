@@ -1,7 +1,8 @@
-import org.example.common.DateInterval;
+import org.example.common.date_intervals.DateInterval;
 import org.example.common.Money;
-import org.example.common.SalaryRate;
+import org.example.common.rates.SalaryRate;
 import org.example.employee.SalaryHistory;
+import org.example.exception.NonContinuousDateIntervalException;
 import org.example.exception.OverlappingDateIntervalException;
 import org.junit.jupiter.api.Test;
 
@@ -16,10 +17,18 @@ public class ExceptionTest {
         SalaryHistory salaryHistory = new SalaryHistory();
         salaryHistory.addSalaryRate(new DateInterval(LocalDate.of(2001, 1, 1), LocalDate.of(2001, 1, 20)),
                 new SalaryRate(new Money(10000000)));
+
+        assertThrows(OverlappingDateIntervalException.class, () -> salaryHistory.addSalaryRate(new DateInterval(LocalDate.of(2001, 1, 2), LocalDate.of(2001, 1, 5)),
+                new SalaryRate(new Money(10000000))));
     }
 
     @Test
     void shouldThrowExceptionWhenDateIntervalsContinuous(){
+        SalaryHistory salaryHistory = new SalaryHistory();
+        salaryHistory.addSalaryRate(new DateInterval(LocalDate.of(2001, 1, 1), LocalDate.of(2001, 1, 20)),
+                new SalaryRate(new Money(10000000)));
 
+        assertThrows(NonContinuousDateIntervalException.class, () -> salaryHistory.addSalaryRate(new DateInterval(LocalDate.of(2001, 1, 22), LocalDate.of(2001, 1, 31)),
+                new SalaryRate(new Money(10000000))));
     }
 }

@@ -1,6 +1,6 @@
-package org.example.common;
+package org.example.common.rates;
 
-import java.time.LocalDate;
+import org.example.common.Money;
 
 /**
  * Класс для ночной ставки

@@ -1,9 +1,11 @@
 package org.example.employee;
 
-import org.example.common.DateInterval;
-import org.example.common.NightRate;
-import org.example.common.SalaryRate;
-import org.example.common.WorkDayStatus;
+import org.example.common.*;
+import org.example.common.date_intervals.DateInterval;
+import org.example.common.date_intervals.MonthInterval;
+import org.example.common.rates.BonusRate;
+import org.example.common.rates.NightRate;
+import org.example.common.rates.SalaryRate;
 
 /**
  * Класс для хранения информации о сотруднике
@@ -20,36 +22,71 @@ public record Employee(
         int employeeId,
         String employeeName,
         String employeeSurname,
+        long insuranceExperience,
         SalaryHistory salaryHistory,
         WorkedDaysHistory workedDaysHistory,
         NightShiftRateHistory nightShiftRateHistory,
-        WorkedNightsHistory workedNightsHistory) {
+        WorkedNightsHistory workedNightsHistory,
+        BonusHistory bonusHistory) {
 
 
     public String getFullName() {
         return employeeName + " " + employeeSurname;
     }
 
-    /**
-     * Конструктор для нового сотрудника
-     * @param employeeId
-     * @param employeeName
-     * @param employeeSurname
-     */
     public Employee(int employeeId,
                     String employeeName,
-                    String employeeSurname){
+                    String employeeSurname,
+                    long insuranceExperience){
         this(
                 employeeId,
                 employeeName,
                 employeeSurname,
+                insuranceExperience,
                 new SalaryHistory(),
                 new WorkedDaysHistory(),
                 new NightShiftRateHistory(),
-                new WorkedNightsHistory()
+                new WorkedNightsHistory(),
+                new BonusHistory()
         );
     }
 
+    public Employee(int employeeId,
+                    String employeeName,
+                    String employeeSurname,
+                    SalaryHistory salaryHistory,
+                    BonusHistory bonusHistory){
+        this(
+                employeeId,
+                employeeName,
+                employeeSurname,
+                0,
+                salaryHistory,
+                new WorkedDaysHistory(),
+                new NightShiftRateHistory(),
+                new WorkedNightsHistory(),
+                bonusHistory
+        );
+    }
+
+    public Employee(int employeeId,
+                    String employeeName,
+                    String employeeSurname,
+                    long insuranceExperience,
+                    SalaryHistory salaryHistory,
+                    WorkedDaysHistory workedDaysHistory){
+        this(
+                employeeId,
+                employeeName,
+                employeeSurname,
+                insuranceExperience,
+                salaryHistory,
+                workedDaysHistory,
+                new NightShiftRateHistory(),
+                new WorkedNightsHistory(),
+                new BonusHistory()
+        );
+    }
 
     public void addSalaryRate(DateInterval dateInterval, SalaryRate salaryRate) {
         salaryHistory.addSalaryRate(dateInterval, salaryRate);
@@ -67,4 +104,7 @@ public record Employee(
         workedNightsHistory.addWorkedNight(dateInterval);
     }
 
+    public void addBonusRate(MonthInterval monthInterval, BonusRate bonusRate) {
+        bonusHistory.addBonusRate(monthInterval, bonusRate);
+    }
 }

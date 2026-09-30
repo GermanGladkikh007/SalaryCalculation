@@ -1,11 +1,9 @@
 package org.example.period;
 
-import org.example.common.DateInterval;
-import org.example.common.Money;
-import org.example.common.NightRate;
+import org.example.common.date_intervals.DateInterval;
+import org.example.common.rates.NightRate;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * Расчетный сегмент для ночных смен

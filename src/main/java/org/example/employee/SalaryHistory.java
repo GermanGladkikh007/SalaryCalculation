@@ -1,7 +1,7 @@
 package org.example.employee;
 
-import org.example.common.DateInterval;
-import org.example.common.SalaryRate;
+import org.example.common.date_intervals.DateInterval;
+import org.example.common.rates.SalaryRate;
 import org.example.exception.NonContinuousDateIntervalException;
 import org.example.exception.OverlappingDateIntervalException;
 

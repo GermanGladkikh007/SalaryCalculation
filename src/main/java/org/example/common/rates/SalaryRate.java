@@ -1,5 +1,7 @@
-package org.example.common;
+package org.example.common.rates;
 
+
+import org.example.common.Money;
 
 /**
  * Класс для ставки оклада
