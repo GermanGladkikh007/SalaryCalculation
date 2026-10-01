@@ -20,4 +20,14 @@ public class EmployeeCreator {
     public Employee createEmployee(long insuranceExperience, SalaryHistory salaryHistory, WorkedDaysHistory workedDaysHistory) {
         return new Employee(15, "Киллиан", "Мбаппе",insuranceExperience,salaryHistory, workedDaysHistory);
     }
+
+    public Employee createEmployee(long insuranceExperience,
+                                   SalaryHistory salaryHistory,
+                                   NightShiftRateHistory nightShiftRateHistory,
+                                   WorkedDaysHistory workedDaysHistory,
+                                   WorkedNightsHistory workedNightsHistory,
+                                   BonusHistory bonusHistory) {
+        return new Employee(15, "Киллиан", "Мбаппе",insuranceExperience,
+                salaryHistory, workedDaysHistory, nightShiftRateHistory, workedNightsHistory,bonusHistory);
+    }
 }
