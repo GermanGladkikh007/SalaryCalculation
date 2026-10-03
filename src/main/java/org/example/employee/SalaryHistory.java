@@ -63,6 +63,7 @@ public class SalaryHistory {
             Predicate<DateInterval> condition,
             BiConsumer<DateInterval, SalaryRate> action
     ) {
+
         for(var entry : salaryHistory.entrySet()){
             DateInterval dateInterval = entry.getKey();
             SalaryRate salaryRate = entry.getValue();

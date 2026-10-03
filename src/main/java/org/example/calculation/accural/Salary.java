@@ -6,7 +6,7 @@ import org.example.common.Money;
 import org.example.employee.Employee;
 import org.example.employee.SalaryHistory;
 import org.example.employee.WorkedDaysHistory;
-import org.example.period.PayrollPeriod;
+import org.example.payroll.PayrollPeriod;
 import org.example.period.SalaryCalculationSegment;
 
 import java.time.LocalDate;
@@ -43,6 +43,7 @@ public class Salary implements Accrual {
         WorkedDaysHistory workedDaysHistory = employee.workedDaysHistory();
         SalaryHistory salaryHistory = employee.salaryHistory();
         DateInterval payrollDateInterval = payrollPeriod.payrollMonthInterval().toDateInterval();
+
         salaryHistory.forEachMatching(
                 salaryInterval -> salaryInterval.overlaps(payrollDateInterval),
                 (salaryInterval, salaryRate) -> {
@@ -51,10 +52,13 @@ public class Salary implements Accrual {
 
                         workedDaysHistory.salaryForEachMatching(
                                 workedInterval -> workedInterval.overlaps(actualSalaryInterval),
-                                (workedInterval) -> result.add(new SalaryCalculationSegment(
-                                        workedInterval.intersection(actualSalaryInterval),
-                                        salaryRate
-                                ))
+                                (workedInterval) -> {
+                                        result.add(new SalaryCalculationSegment(
+                                                workedInterval.intersection(actualSalaryInterval),
+                                                salaryRate
+                                        ));
+
+                                }
                         );
 
                     }

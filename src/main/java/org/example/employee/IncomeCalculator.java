@@ -3,7 +3,7 @@ package org.example.employee;
 import org.example.calculation.accural.*;
 import org.example.common.Money;
 import org.example.common.date_intervals.MonthInterval;
-import org.example.period.PayrollPeriod;
+import org.example.payroll.PayrollPeriod;
 
 import java.time.Month;
 import java.time.YearMonth;

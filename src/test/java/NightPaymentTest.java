@@ -4,7 +4,7 @@ import org.example.common.Money;
 import org.example.common.date_intervals.MonthInterval;
 import org.example.common.rates.NightRate;
 import org.example.employee.*;
-import org.example.period.PayrollPeriod;
+import org.example.payroll.PayrollPeriod;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

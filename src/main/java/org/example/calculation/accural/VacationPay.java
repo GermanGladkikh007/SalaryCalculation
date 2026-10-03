@@ -6,7 +6,7 @@ import org.example.common.Money;
 import org.example.employee.Employee;
 import org.example.employee.SalaryHistory;
 import org.example.employee.WorkedDaysHistory;
-import org.example.period.PayrollPeriod;
+import org.example.payroll.PayrollPeriod;
 import org.example.period.VacationCalculationSegment;
 
 import java.time.LocalDate;

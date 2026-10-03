@@ -1,12 +1,11 @@
 import org.example.calculation.accural.SickLeavePay;
-import org.example.calculation.accural.VacationPay;
 import org.example.common.Money;
 import org.example.common.WorkDayStatus;
 import org.example.common.date_intervals.DateInterval;
 import org.example.common.date_intervals.MonthInterval;
 import org.example.common.rates.SalaryRate;
 import org.example.employee.*;
-import org.example.period.PayrollPeriod;
+import org.example.payroll.PayrollPeriod;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

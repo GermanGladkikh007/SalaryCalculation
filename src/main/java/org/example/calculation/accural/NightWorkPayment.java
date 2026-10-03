@@ -7,7 +7,7 @@ import org.example.employee.Employee;
 import org.example.employee.NightShiftRateHistory;
 import org.example.employee.WorkedNightsHistory;
 import org.example.period.NightWorkPaymentSegment;
-import org.example.period.PayrollPeriod;
+import org.example.payroll.PayrollPeriod;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

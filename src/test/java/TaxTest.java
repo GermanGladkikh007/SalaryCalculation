@@ -1,5 +1,3 @@
-import org.example.calculation.accural.NightWorkPayment;
-import org.example.calculation.accural.Salary;
 import org.example.calculation.deduction.Tax;
 import org.example.common.Money;
 import org.example.common.WorkDayStatus;
@@ -9,7 +7,7 @@ import org.example.common.rates.BonusRate;
 import org.example.common.rates.NightRate;
 import org.example.common.rates.SalaryRate;
 import org.example.employee.*;
-import org.example.period.PayrollPeriod;
+import org.example.payroll.PayrollPeriod;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

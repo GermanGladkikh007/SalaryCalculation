@@ -4,14 +4,11 @@ import org.example.calculation.Accrual;
 import org.example.common.InsuranceExperience;
 import org.example.common.Money;
 import org.example.common.date_intervals.DateInterval;
-import org.example.employee.BonusHistory;
 import org.example.employee.Employee;
 import org.example.employee.SalaryHistory;
 import org.example.employee.WorkedDaysHistory;
-import org.example.period.BonusCalculationSegment;
-import org.example.period.PayrollPeriod;
+import org.example.payroll.PayrollPeriod;
 import org.example.period.SickLeavePaymentSegment;
-import org.example.period.VacationCalculationSegment;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

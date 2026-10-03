@@ -7,7 +7,7 @@ import org.example.employee.BonusHistory;
 import org.example.employee.Employee;
 import org.example.employee.SalaryHistory;
 import org.example.period.BonusCalculationSegment;
-import org.example.period.PayrollPeriod;
+import org.example.payroll.PayrollPeriod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,4 +93,5 @@ public class Bonus implements Accrual {
     public String getAmount() {
         return Long.toString(payrollPeriodBonus.kopecks());
     }
+
 }

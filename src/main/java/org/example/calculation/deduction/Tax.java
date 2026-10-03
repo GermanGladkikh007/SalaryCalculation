@@ -5,7 +5,7 @@ import org.example.common.Money;
 import org.example.common.rates.TaxRate;
 import org.example.employee.Employee;
 import org.example.employee.IncomeCalculator;
-import org.example.period.PayrollPeriod;
+import org.example.payroll.PayrollPeriod;
 
 import java.time.YearMonth;
 

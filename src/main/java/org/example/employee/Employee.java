@@ -27,45 +27,33 @@ public record Employee(
         WorkedDaysHistory workedDaysHistory,
         NightShiftRateHistory nightShiftRateHistory,
         WorkedNightsHistory workedNightsHistory,
-        BonusHistory bonusHistory) {
+        BonusHistory bonusHistory,
+        EnforcementOrderPercent enforcementOrderPercent) {
 
 
     public String getFullName() {
         return employeeName + " " + employeeSurname;
     }
 
+
     public Employee(int employeeId,
                     String employeeName,
                     String employeeSurname,
-                    long insuranceExperience){
+                    long insuranceExperience,
+                    SalaryHistory salaryHistory,
+                    BonusHistory bonusHistory,
+                    WorkedDaysHistory workedDaysHistory){
         this(
                 employeeId,
                 employeeName,
                 employeeSurname,
                 insuranceExperience,
-                new SalaryHistory(),
-                new WorkedDaysHistory(),
-                new NightShiftRateHistory(),
-                new WorkedNightsHistory(),
-                new BonusHistory()
-        );
-    }
-
-    public Employee(int employeeId,
-                    String employeeName,
-                    String employeeSurname,
-                    SalaryHistory salaryHistory,
-                    BonusHistory bonusHistory){
-        this(
-                employeeId,
-                employeeName,
-                employeeSurname,
-                0,
                 salaryHistory,
-                new WorkedDaysHistory(),
+                workedDaysHistory,
                 new NightShiftRateHistory(),
                 new WorkedNightsHistory(),
-                bonusHistory
+                bonusHistory,
+                new EnforcementOrderPercent(0)
         );
     }
 
@@ -84,9 +72,114 @@ public record Employee(
                 workedDaysHistory,
                 new NightShiftRateHistory(),
                 new WorkedNightsHistory(),
-                new BonusHistory()
+                new BonusHistory(),
+                new EnforcementOrderPercent(0)
         );
     }
+
+    public Employee(int employeeId,
+                    String employeeName,
+                    String employeeSurname,
+                    long insuranceExperience,
+                    SalaryHistory salaryHistory,
+                    WorkedDaysHistory workedDaysHistory,
+                    NightShiftRateHistory nightShiftRateHistory,
+                    WorkedNightsHistory workedNightsHistory){
+        this(
+                employeeId,
+                employeeName,
+                employeeSurname,
+                insuranceExperience,
+                salaryHistory,
+                workedDaysHistory,
+                nightShiftRateHistory,
+                workedNightsHistory,
+                new BonusHistory(),
+                new EnforcementOrderPercent(0)
+        );
+    }
+
+
+    public Employee(int employeeId,
+                    String employeeName,
+                    String employeeSurname,
+                    long insuranceExperience){
+        this(
+                employeeId,
+                employeeName,
+                employeeSurname,
+                insuranceExperience,
+                new SalaryHistory(),
+                new WorkedDaysHistory(),
+                new NightShiftRateHistory(),
+                new WorkedNightsHistory(),
+                new BonusHistory(),
+                new EnforcementOrderPercent(0)
+        );
+    }
+
+    public Employee(int employeeId,
+                    String employeeName,
+                    String employeeSurname,
+                    long insuranceExperience,
+                    SalaryHistory salaryHistory,
+                    BonusHistory bonusHistory){
+        this(
+                employeeId,
+                employeeName,
+                employeeSurname,
+                insuranceExperience,
+                salaryHistory,
+                new WorkedDaysHistory(),
+                new NightShiftRateHistory(),
+                new WorkedNightsHistory(),
+                bonusHistory,
+                new EnforcementOrderPercent(0)
+        );
+    }
+
+    public Employee(int employeeId,
+                    String employeeName,
+                    String employeeSurname,
+                    SalaryHistory salaryHistory,
+                    BonusHistory bonusHistory,
+                    WorkedDaysHistory workedDaysHistory){
+        this(
+                employeeId,
+                employeeName,
+                employeeSurname,
+                0,
+                salaryHistory,
+                workedDaysHistory,
+                new NightShiftRateHistory(),
+                new WorkedNightsHistory(),
+                bonusHistory,
+                new EnforcementOrderPercent(0)
+        );
+    }
+
+    public Employee(int employeeId,
+                    String employeeName,
+                    String employeeSurname,
+                    long insuranceExperience,
+                    SalaryHistory salaryHistory,
+                    WorkedDaysHistory workedDaysHistory,
+                    EnforcementOrderPercent enforcementOrderPercent){
+        this(
+                employeeId,
+                employeeName,
+                employeeSurname,
+                insuranceExperience,
+                salaryHistory,
+                workedDaysHistory,
+                new NightShiftRateHistory(),
+                new WorkedNightsHistory(),
+                new BonusHistory(),
+                enforcementOrderPercent
+
+        );
+    }
+
 
     public void addSalaryRate(DateInterval dateInterval, SalaryRate salaryRate) {
         salaryHistory.addSalaryRate(dateInterval, salaryRate);
